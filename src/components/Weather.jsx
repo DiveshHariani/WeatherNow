@@ -38,22 +38,30 @@ class Weather extends React.Component {
         .catch(err => console.log(err));
     }
 
-    // makeDayArray() {
-    //     let currentDate = new Date();
-    //     let currentDay = currentDate.getDay();
-    //     let dayArrays = [currentDay]
-    //     for(let i=currentDay + 1; i != currentDay; i = (i + 1)%7)
-    //         dayArrays.push(i);
-    //     console.log("Day Arrays: ", dayArrays);
-    //     return dayArrays;
-    // }
-
     render() {
+
+        const isDataReady = !this.state.loading;
+
 
         return (
             <div className="container my-4 text-center">
+                    
+                {
+                    isDataReady &&
+                    <div className='card'>
+                        <div className="card-header">
+                            {this.state.forecast.forecastList[0].date.getDate()/this.forecast.forecastList[0].date.getMonth()/this.forecast.forecastList[0].date.getFullYear()}
+                        </div>
+                        <div className="card-body">
+                            <h5 className="card-title">Special title treatment</h5>
+                            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="/" className="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                } 
+
                 <div className="row">
-                    {!this.state.loading && this.state.forecast && this.state.forecast.forecastList.map((e) => {
+                    { isDataReady && this.state.forecast.forecastList.map((e) => {
                         return (<div key = {e.date.getDate()} className="d-flex col-sm justify-content-center my-1">
                             <WeatherCard 
                                 day={e.date.getDate()}
@@ -70,52 +78,4 @@ class Weather extends React.Component {
         ); 
     }
 }
-
-// function Weather(props) {
-//   let currentDate = new Date();
-//   let currentDay = currentDate.getDay();
-//   let dayArrays = [currentDay]
-//   for(let i=currentDay + 1; i != currentDay; i = (i + 1)%7)
-//     dayArrays.push(i)
-
-//   const [forecast, changeForecast] = useState(null);
-
-//   const callApi = async () => {
-//         ``console``.log("Making API call");
-//         try {
-//             let results = await fetch("https://api.openweathermap.org/data/2.5/forecast?q=mumbai&appid=5e850c73432faeb169bbfed7a0a9fcd6&units=metric");
-//             let jsonData = await results.json();
-//             changeForecast(jsonData);
-//             console.log(forecast); 
-//         } catch(err) {
-//             console.log(err);
-//         }
-//     }
-
-//   useEffect(() => {
-//     const url = "https://api.openweathermap.org/data/2.5/forecast?q=mumbai&appid=5e850c73432faeb169bbfed7a0a9fcd6&units=metric";
-    
-//     fetch(url)
-//     .then(res => res.json())
-//     .then(jsonData => {changeForecast(jsonData); 
-//                         console.log(forecast);
-//                     })
-//     .catch((err) => {console.log(err)});
-//   }, []);
-  
-//   return (
-//     <div className="container my-4 text-center">
-//         <div className="row">
-//             {dayArrays.map((e) => {
-//                 return (<div key = {e} className="d-flex col-sm justify-content-center my-1">
-//                     <WeatherCard day={e} />
-//                 </div>)
-//             })}
-//         </div>
-//     </div>
-//   )
-// }
-
-// Weather.propTypes = {}
-
 export default Weather
