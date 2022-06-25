@@ -1,7 +1,9 @@
 import React from 'react'
+import ThemeContext from '../context/ThemeContext';
 import WeatherCard from './WeatherCard'
 
 class Weather extends React.Component {
+
     constructor() {
         super();
         this.state = {
@@ -39,42 +41,31 @@ class Weather extends React.Component {
     }
 
     render() {
-
         const isDataReady = !this.state.loading;
 
 
         return (
-            <div className="container my-4 text-center">
-                    
-                {
-                    isDataReady &&
-                    <div className='card'>
-                        <div className="card-header">
-                            {this.state.forecast.forecastList[0].date.getDate()/this.forecast.forecastList[0].date.getMonth()/this.forecast.forecastList[0].date.getFullYear()}
-                        </div>
-                        <div className="card-body">
-                            <h5 className="card-title">Special title treatment</h5>
-                            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="/" className="btn btn-primary">Go somewhere</a>
+            <ThemeContext.Consumer>
+                { ({ theme, updateTheme }) =>
+                    <div className="container my-4 text-center" style={theme}>
+                        <div className="row">
+                            <h1> {console.log('---', theme)} </h1>
+                            { isDataReady && this.state.forecast.forecastList.map((e) => {
+                                return (<div key = {e.date.getDate()} className="d-flex col-sm justify-content-center my-1">
+                                    <WeatherCard 
+                                        day={e.date.getDate()}
+                                        month = {e.date.getMonth()}
+                                        year = {e.date.getFullYear()}
+                                        temperature = {e.list.main.temp}
+                                        temperatureFeelsLike = {e.list.main.feels_like}
+                                        weather = {e.list.weather[0].main}
+                                    />
+                                </div>)
+                            })}
                         </div>
                     </div>
-                } 
-
-                <div className="row">
-                    { isDataReady && this.state.forecast.forecastList.map((e) => {
-                        return (<div key = {e.date.getDate()} className="d-flex col-sm justify-content-center my-1">
-                            <WeatherCard 
-                                day={e.date.getDate()}
-                                month = {e.date.getMonth()}
-                                year = {e.date.getFullYear()}
-                                temperature = {e.list.main.temp}
-                                temperatureFeelsLike = {e.list.main.feels_like}
-                                weather = {e.list.weather[0].main}
-                            />
-                        </div>)
-                    })}
-                </div>
-            </div>
+                }
+            </ThemeContext.Consumer>
         ); 
     }
 }
